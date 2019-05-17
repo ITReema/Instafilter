@@ -13,8 +13,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var intensity: UISlider!
-    var currentImage: UIImage!
+    @IBOutlet var changeFilter: UIButton!
     
+    var currentImage: UIImage!
     var context: CIContext!
     var currentFilter: CIFilter!
     
@@ -63,7 +64,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func setFilter(action: UIAlertAction) {
         guard currentImage != nil else { return }
         guard let actionTitle = action.title else { return }
-
+        changeFilter.setTitle(actionTitle, for: .normal)
         currentFilter = CIFilter(name: actionTitle)
         
         let beginImage = CIImage(image: currentImage)
@@ -74,7 +75,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
-            // we got back an error!
+
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
@@ -100,8 +101,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let popoverController = ac.popoverPresentationController{
             popoverController.sourceView = sender
             popoverController.sourceRect = sender.bounds
+
         }
         present(ac, animated: true)
+    
     }
     
     @IBAction func save(_ sender: Any) {
